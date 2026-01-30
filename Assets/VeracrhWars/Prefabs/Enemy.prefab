@@ -189,4 +189,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   moveSpeed: 3.5
   rotateSpeed: 12
-  stopDistance: 0.9
+  stopDistance: 3

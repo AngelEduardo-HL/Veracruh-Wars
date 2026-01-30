@@ -34,6 +34,8 @@ public class EnemyController : MonoBehaviour
         float dist = toPlayer.magnitude;
         if (dist <= stopDistance) return;
 
+        Debug.DrawLine(_rb.position, _player.position, Color.red);
+
         Vector3 dir = toPlayer / dist;
 
         Vector3 newPos = _rb.position + dir * moveSpeed * Time.fixedDeltaTime;
