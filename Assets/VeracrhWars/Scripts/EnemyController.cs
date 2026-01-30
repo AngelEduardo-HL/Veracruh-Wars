@@ -14,8 +14,7 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-
-        _rb.useGravity = false;
+        _rb.useGravity = true;
         _rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
 
@@ -37,16 +36,22 @@ public class EnemyController : MonoBehaviour
 
         Vector3 dir = toPlayer / dist;
 
-        // Movimiento
         Vector3 newPos = _rb.position + dir * moveSpeed * Time.fixedDeltaTime;
         _rb.MovePosition(newPos);
 
-        // Rotación hacia el jugador
         if (dir.sqrMagnitude > 0.0001f)
         {
             Quaternion target = Quaternion.LookRotation(dir, Vector3.up);
             Quaternion newRot = Quaternion.Slerp(_rb.rotation, target, rotateSpeed * Time.fixedDeltaTime);
             _rb.MoveRotation(newRot);
         }
+    }
+
+    public void Die()
+    {
+        if (WaveManager.Instance != null)
+            WaveManager.Instance.UnregisterEnemy();
+
+        Destroy(gameObject);
     }
 }
