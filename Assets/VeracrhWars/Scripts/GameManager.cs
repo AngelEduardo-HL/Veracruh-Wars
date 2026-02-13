@@ -2,17 +2,48 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int score = 0;
-    [SerializeField] private int lives = 3; // Player starts with 3 lives
+    public static GameManager Instance { get; private set; }
 
-    void Start()
+    [SerializeField] private int score = 0;
+    [SerializeField] private int lives = 3;
+
+    private void Awake()
     {
-        lives = 3; // Initialize lives at the start of the game
-        score = 0; // Initialize score at the start of the game
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
-    void Update()
+    private void Start()
     {
-        
+        lives = 3;
+        score = 0;
+    }
+
+    public void PlayerKilled()
+    {
+        lives--;
+
+        if (lives <= 0)
+        {
+            GameOver();
+            return;
+        }
+
+        SceneManager sm = FindFirstObjectByType<SceneManager>();
+        if (sm != null) sm.ReloadCurrent();
+        else UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
+        );
+    }
+
+    public void GameOver()
+    {
+        SceneManager sm = FindFirstObjectByType<SceneManager>();
+        if (sm != null) sm.LoadSceneByName("Menu");
+        else Debug.Log("GAME OVER");
     }
 }

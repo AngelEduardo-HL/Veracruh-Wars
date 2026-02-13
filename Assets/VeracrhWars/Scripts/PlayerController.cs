@@ -13,7 +13,11 @@ public class PlayerController : MonoBehaviour
     [Header("Shooting")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform firePoint;
-    [SerializeField] private float fireRate = 8f; //Cadencia
+    [SerializeField] private float fireRate = 8f;
+
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private float animDamp = 0.12f;
 
     private Rigidbody _rb;
     private Vector2 _moveInput;
@@ -29,40 +33,38 @@ public class PlayerController : MonoBehaviour
         _rb.useGravity = true;
         _rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        if (firePoint == null)
-            firePoint = transform;
+        if (firePoint == null) firePoint = transform;
+        if (animator == null) animator = GetComponentInChildren<Animator>();
 
         camera = Camera.main;
     }
 
     public void OnMove(InputValue value) => _moveInput = value.Get<Vector2>();
-
     public void OnFire(InputValue value) => _isFiring = value.isPressed;
     public void OnRightClick(InputValue value) => _isAiming = value.isPressed;
 
-
     private void Update()
     {
-        // MOVIMIENTO
         Vector3 dir = new Vector3(_moveInput.x, 0f, _moveInput.y);
         if (dir.sqrMagnitude > 1f) dir.Normalize();
 
         float speed = moveSpeed;
-
-        // Sprinting
-        if (Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed)
-            speed *= sprintMultiplier;
+        bool isRunning = (Keyboard.current != null && Keyboard.current.leftShiftKey.isPressed && dir.sqrMagnitude > 0.0001f);
+        if (isRunning) speed *= sprintMultiplier;
 
         _velocity = dir * speed;
 
-        if (_isAiming)
-        {
-            Aim();
-        }
+        // ROTACIÓN
+        if (_isAiming) Aim();
+        else if (rotateToMoveDirection && dir.sqrMagnitude > 0.0001f) Rotate(dir);
 
-        else if (rotateToMoveDirection && dir.sqrMagnitude > 0.0001f)
+        // ANIMACIÓN
+        if (animator != null)
         {
-            Rotate(dir);
+            float max = moveSpeed * sprintMultiplier;
+            float normalizedSpeed = (_velocity.magnitude / max);
+            animator.SetFloat("Speed", normalizedSpeed, animDamp, Time.deltaTime);
+            // animator.SetBool("IsAiming", _isAiming);
         }
 
         // DISPARO
@@ -88,30 +90,23 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        Vector3 pos = firePoint.position;
-        Quaternion rot = firePoint.rotation;
-
-        Instantiate(bulletPrefab, pos, rot);
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     }
 
     private void Rotate(Vector3 rotationTarget)
     {
+        if (rotationTarget.sqrMagnitude <= 0.0001f) return;
         Quaternion targetRotation = Quaternion.LookRotation(rotationTarget);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
     private void Aim()
     {
-        //Hacer un raycast desde la cámara hacia la pocisión del mopuse
         Ray ray = camera.ScreenPointToRay(Mouse.current.position.value);
         RaycastHit hit;
         Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity);
 
-        //Si el racyast golpea un punto ese será el objetivo para mirar, si no obtener el útimo punto del rayo
         Vector3 point = hit.collider != null ? hit.point : ray.GetPoint(Mathf.Infinity);
-        Debug.DrawRay(ray.origin, ray.direction * Mathf.Infinity);
-
-        //Obtener la dirección del punto obtenido respecto al jugador, hacer el eje y 0 para que solamente rote en dicho eje.
         Vector3 direction = point - transform.position;
         direction.y = 0;
         Rotate(direction);

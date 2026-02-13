@@ -544,7 +544,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &529226393
 Transform:
   m_ObjectHideFlags: 0
@@ -589,7 +589,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &604223988
 Transform:
   m_ObjectHideFlags: 0
@@ -683,7 +683,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &884076375
 Transform:
   m_ObjectHideFlags: 0
@@ -728,7 +728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &930413250
 Transform:
   m_ObjectHideFlags: 0
@@ -773,7 +773,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1111003186
 Transform:
   m_ObjectHideFlags: 0
@@ -814,7 +814,6 @@ GameObject:
   - component: {fileID: 1126673124}
   - component: {fileID: 1126673127}
   - component: {fileID: 1126673126}
-  - component: {fileID: 1126673125}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -850,18 +849,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   spawnRadius: 0.5
---- !u!114 &1126673125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1126673122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e1d2bee2fdbea242bc035ac5a6e4936, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneManager
 --- !u!114 &1126673126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -888,7 +875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53243e630f5ca0f4d9688216dfb3a11f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
-  enemyPrefab: {fileID: 7103991290282786754, guid: 70444840294d1e34f82ad680dc287993, type: 3}
+  enemyPrefab: {fileID: 8739615254680686916, guid: 70444840294d1e34f82ad680dc287993, type: 3}
   spawnInterval: 5
   maxEnemiesOnMap: 20
   maxPerSpawn: 5
