@@ -23,6 +23,7 @@ public class PlayerShield : MonoBehaviour
     {
         HasShield = true;
         if (_shieldVisualInstance != null) _shieldVisualInstance.SetActive(true);
+
     }
 
     public bool ConsumeShieldIfAny()
